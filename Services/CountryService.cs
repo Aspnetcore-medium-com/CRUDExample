@@ -35,7 +35,7 @@ namespace Services
                 throw new ArgumentException("Country name cannot be null or empty.", nameof(countryAddRequest.CountryName));
             }
 
-            if ( _countries.Any(country => country.CountryName.ToLower() == countryAddRequest.CountryName.ToLower()))
+            if ( _countries.Any(country => country.CountryName.Equals(countryAddRequest.CountryName,StringComparison.OrdinalIgnoreCase)))
             {
                 throw new ArgumentException("Country with the same name already exists.", nameof(countryAddRequest.CountryName));
             }
