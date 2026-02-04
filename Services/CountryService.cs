@@ -52,5 +52,16 @@ namespace Services
         {
             return Task.FromResult( _countries.Select(country => _mapper.Map<CountryResponse>(country)).ToList());
         }
+
+        public Task<CountryResponse> GetCountryById(Guid guid)
+        {
+           Country? country = _countries.FirstOrDefault( c => c.CountryId == guid);
+           if (country == null)
+           {
+                throw new ArgumentException(message: "Country with the specified ID does not exist.", paramName: nameof(guid));
+           }
+           CountryResponse countryResponse = _mapper.Map<CountryResponse>(country);
+           return Task.FromResult(countryResponse);
+        }
     }
 }

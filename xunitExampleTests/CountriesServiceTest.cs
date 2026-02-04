@@ -143,7 +143,49 @@ namespace xunitCRUDTests
             Assert.Contains(countries, c => c.CountryName == "USA");
             Assert.Contains(countries, c => c.CountryName == "Canada");
         }
-        
+
+        #endregion
+        #region GetCountryById Tests
+        [Fact]
+        // when country id is valid, then GetCountryById should return the corresponding country
+        public async Task GetCountryById_ValidId_ReturnsCountry()
+        {
+            // Arrange
+            var countryAddRequest = new CountryAddRequest
+            {
+                CountryName = "Australia"
+            };
+            var addedCountry = await _countriesService.AddCountry(countryAddRequest);
+            // Act
+            var country = await _countriesService.GetCountryById(addedCountry.CountryId);
+            // Assert
+            Assert.NotNull(country);
+            Assert.Equal(addedCountry.CountryId, country.CountryId);
+            Assert.Equal(addedCountry.CountryName, country.CountryName);
+        }
+        [Fact]
+        //  when country id is valid , then GetCountryId should return only one country in the reponse
+        public async Task GetCountryById_ValidId_ReturnsSingleCountry()
+        {
+            // Arrange
+            var countryAddRequest1 = new CountryAddRequest
+            {
+                CountryName = "Germany"
+            };
+            var countryAddRequest2 = new CountryAddRequest
+            {
+                CountryName = "France"
+            };
+            var addedCountry1 = await _countriesService.AddCountry(countryAddRequest1);
+            await _countriesService.AddCountry(countryAddRequest2);
+            // Act
+            var country = await _countriesService.GetCountryById(addedCountry1.CountryId);
+            // Assert
+            Assert.NotNull(country);
+            Assert.Equal(addedCountry1.CountryId, country.CountryId);
+            Assert.Equal(addedCountry1.CountryName, country.CountryName);
+        } 
+
         #endregion
 
 
