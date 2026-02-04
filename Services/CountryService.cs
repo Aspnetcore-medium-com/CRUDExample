@@ -37,7 +37,7 @@ namespace Services
 
             if ( _countries.Any(country => country.CountryName.Equals(countryAddRequest.CountryName,StringComparison.OrdinalIgnoreCase)))
             {
-                throw new ArgumentException("Country with the same name already exists.", nameof(countryAddRequest.CountryName));
+                throw new ArgumentException(message: "Country with the same name already exists.",paramName: nameof(countryAddRequest.CountryName));
             }
             Country country = _mapper.Map<Country>(countryAddRequest);
 
@@ -46,6 +46,11 @@ namespace Services
             CountryResponse countryResponse = _mapper.Map<CountryResponse>(country);
             return await Task.FromResult(countryResponse);
 
+        }
+
+        public Task<List<CountryResponse>> GetAllCountries()
+        {
+            return Task.FromResult( _countries.Select(country => _mapper.Map<CountryResponse>(country)).ToList());
         }
     }
 }

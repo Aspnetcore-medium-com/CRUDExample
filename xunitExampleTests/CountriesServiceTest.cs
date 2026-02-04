@@ -39,6 +39,7 @@ namespace xunitCRUDTests
             _countriesService = new CountryService(_mapperMock.Object);
 
         }
+        #region AddCountry Tests
         [Fact]
         //when countryAddRequest is null, then AddCountry should throw ArgumentNullException
         public async Task AddCountry_NullCountryAddRequest_ThrowsArgumentNullException()
@@ -107,5 +108,44 @@ namespace xunitCRUDTests
             Assert.IsType<Guid>(countryResponse.CountryId);
 
         }
+        #endregion
+        #region GetAllCountries Tests
+        [Fact]
+        // When there are no countries, GetAllCountries should return an empty list
+        public async Task GetAllCountries_NoCountries_ReturnsEmptyList()
+        {
+            // Act
+            var countries = await _countriesService.GetAllCountries();
+            // Assert
+            Assert.NotNull(countries);
+            Assert.Empty(countries);
+        }
+        [Fact]
+        // When there are multiple countries, GetAllCountries should return all countries
+        public async Task GetAllCountries_MultipleCountries_ReturnsAllCountries()
+        {
+            // Arrange
+            var countryAddRequest1 = new CountryAddRequest
+            {
+                CountryName = "USA"
+            };
+            var countryAddRequest2 = new CountryAddRequest
+            {
+                CountryName = "Canada"
+            };
+            await _countriesService.AddCountry(countryAddRequest1);
+            await _countriesService.AddCountry(countryAddRequest2);
+            // Act
+            var countries = await _countriesService.GetAllCountries();
+            // Assert
+            Assert.NotNull(countries);
+            Assert.Equal(2, countries.Count);
+            Assert.Contains(countries, c => c.CountryName == "USA");
+            Assert.Contains(countries, c => c.CountryName == "Canada");
+        }
+        
+        #endregion
+
+
     }
 }

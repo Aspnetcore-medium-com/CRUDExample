@@ -14,5 +14,7 @@ namespace ServiceContracts
         /// <returns>A task that represents the asynchronous operation. The task result contains a <see cref="CountryResponse"/>
         /// with information about the added country.</returns>
         public Task<CountryResponse> AddCountry(CountryAddRequest? countryAddRequest);
+
+        public Task<List<CountryResponse>> GetAllCountries();
     }
 }
